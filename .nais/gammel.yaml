@@ -1,0 +1,17 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: <MY-APP>
+  namespace: <MY-TEAM>
+spec:
+  ingresses:
+    - https://<MY-APP>.<MY-ENV>.nav.cloud.nais.io
+  port: 8080
+  ttl: 3h # Time before clean-up 
+  replicas:
+    max: 1
+    min: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 32Mi

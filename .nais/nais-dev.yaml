@@ -1,0 +1,45 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: jamph-mlflow
+  namespace: team-researchops
+  labels:
+    team: team-researchops
+spec:
+  image: {{image}}
+  port: 11434
+  accessPolicy:
+    inbound:
+      rules:
+        - application: reops-felgen
+          namespace: team-researchops
+        - application: jamph-umami-frontend-dev
+          namespace: team-researchops
+        - application: jamph-rag-api-umami-dev
+          namespace: team-researchops
+        - application: jamph-ml-trainer
+          namespace: team-researchops
+        - application: jamph-ollama
+          namespace: team-researchops
+        
+  liveness:
+    path: /api/version
+    initialDelay: 60
+    port: 11434
+  readiness:
+    path: /api/tags
+    initialDelay: 60
+    port: 11434
+  resources:
+    limits:
+      memory: 7Gi
+    requests:
+      cpu: 500m
+      memory: 5Gi
+  replicas:
+    min: 1
+    max: 3
+    cpuThresholdPercentage: 80
+  ingresses:
+    - "https://jamph-mlflow.ansatt.dev.nav.no"
+    - "https://jamph-mlflow.intern.dev.nav.no"
